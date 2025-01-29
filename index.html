@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技大片 - 未来之战</title>
+    <title>AI大片 - 未来之战</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -44,6 +44,23 @@
             font-size: 1.2rem;
             color: #ccc;
         }
+        .progress-container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #1a1a1a;
+            border-radius: 25px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 15%;
+            height: 20px;
+            background-color: #00ffcc;
+            text-align: center;
+            line-height: 20px;
+            color: #000;
+            font-weight: bold;
+        }
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -65,23 +82,35 @@
             align-items: center; /* 垂直居中对齐 */
             flex-direction: column; /* 修改为垂直布局 */
             cursor: pointer; /* 添加鼠标指针效果 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
         }
-        .character img {
-            width: 256px; /* 设置固定宽度 */
-            height: 256px; /* 设置固定高度 */
-            border-radius: 10px;
-            transition: transform 0.3s;
-            margin-bottom: 20px; /* 修改为下边距 */
+
+        .character::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.2)); /* 修改为45%透明度 */
+            border-radius: 10px; /* 与图片圆角保持一致 */
+            z-index: 1; /* 确保渐变背景在图片下方 */
         }
+
         .character h2 {
             font-size: 1.5rem;
             margin: 15px 0 10px;
-            color: #00ffcc;
-            text-shadow: 0 0 5px #00ffcc;
+            color: #00ffcc; /* 科技感颜色 */
+            text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc; /* 添加文字阴影 */
+            font-weight: bold; /* 加粗 */
         }
         .character p {
             font-size: 1rem;
-            color: #ccc;
+            color: #00ffcc; /* 科技感颜色 */
+            font-weight: bold; /* 加粗 */
         }
         .full-description {
             display: none;
@@ -94,16 +123,6 @@
         .character.open .full-description {
             display: block;
             max-height: 500px; /* 设置最大高度 */
-        }
-        .character::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.2), transparent);
-            transition: left 0.5s;
         }
         .character:hover::before {
             left: 100%;
@@ -141,6 +160,31 @@
         .video-container video:hover {
             box-shadow: 0 0 40px rgba(0, 255, 204, 0.8);
         }
+        .jump-to-video-button {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background-color: rgba(0, 255, 204, 0.5);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .jump-to-video-button:hover {
+            background-color: rgba(0, 255, 204, 0.8);
+        }
+        @media (max-width: 768px) {
+            .video-container video {
+                width: 100%;
+                height: 300px;
+            }
+            .character {
+                width: 100%;
+            }
+        }
         .glow-text {
             animation: glow 2s infinite alternate;
         }
@@ -156,10 +200,20 @@
         <p>一场跨越时空的史诗对决</p>
     </header>
 
+    <div class="progress-container">
+        <div class="progress-bar">15%</div>
+    </div>
+
+    <div class="video-container" id="video-section">
+        <video id="videoPlayer" autoplay muted controls>
+            <source src="/video/fxy0.mp4" type="video/mp4">
+            您的浏览器不支持HTML5视频标签。
+        </video>
+    </div>
+
     <div class="container">
-        <div class="character" data-video="fxy1.mp4">
-            <img src="role1.png" alt="人物1">
-            <h2>方鑫洋</h2>
+        <div class="character" data-video="fxy1.mp4" style="background-image: url('/image/role1.jpg');">
+            <h2 onclick="jumpToVideo('fxy1.mp4')">方鑫洋</h2>
             <p>天才科学家，掌握着改变未来的关键科技。</p>
             <div class="full-description">
                 <p>背景：方鑫洋是全球顶尖科技公司“未来科技”的CEO，他创办的公司专注于开发前沿科技产品，如人工智能、量子计算和生物技术。在全球危机面前，他决定将公司的资源投入到对抗邪恶势力的战斗中。</p>
@@ -167,29 +221,8 @@
                 <p>动机：方鑫洋的目标是推动科技进步，改善人类生活。在《未来之战》中，他相信科技是解决全球性问题的关键。他与主角团队合作，利用自己的科技资源为他们的行动提供支持。</p>
             </div>
         </div>
-        <div class="character" data-video="wxw.mp4">
-            <img src="role2.png" alt="人物2">
-            <h2>ChengPP</h2>
-            <p>黑客，能够破解任何系统。</p>
-            <div class="full-description" style="display: none;">
-                <p>背景：ChengPP原名陈佩佩，是一名顶尖的黑客和网络安全专家。她曾是一名地下黑客组织的成员，专门从事网络攻击和信息窃取。然而，在一次偶然的机会中，她被招募加入了一个秘密的反恐组织，负责保护全球关键基础设施的安全。</p>
-                <p>性格：ChengPP聪明、机智，性格独立且有些叛逆。她对权威持怀疑态度，但内心深处有着强烈的正义感。她喜欢挑战权威，常常通过自己的技术手段揭露社会不公。</p>
-                <p>动机：ChengPP的目标是揭露真相，打击腐败和不公。她相信信息自由和透明是社会进步的关键。在《未来之战》中，她的目标是阻止邪恶势力利用网络技术控制全球。</p>
-            </div>
-        </div>
-        <div class="character" data-video="video3.mp4">
-            <img src="character3.jpg" alt="人物3">
-            <h2>段振宇</h2>
-            <p>AI指挥官，掌控着未来的命运。</p>
-            <div class="full-description" style="display: none;">
-                <p>背景：段振宇是一名天才科学家和工程师，他领导了一个顶尖的AI研究团队，开发出了具有高度智能和自主决策能力的AI系统。然而，在一次意外的事故中，AI系统失控，段振宇被迫面对自己创造的“怪物”。他被邪恶势力招募，成为他们的AI指挥官，负责操控AI系统进行全球范围内的战争。</p>
-                <p>性格：段振宇聪明、果断，但内心深处有着强烈的孤独感和对失败的恐惧。他对AI有着复杂的情感，既是创造者，也是囚徒。他被邪恶势力操控，但内心深处仍然渴望自由和救赎。</p>
-                <p>动机：段振宇的目标是控制AI系统，防止其对人类社会造成更大的威胁。然而，在邪恶势力的操控下，他不得不执行他们的命令。在电影中，他逐渐意识到自己的错误，并试图寻找机会摆脱控制。</p>
-            </div>
-        </div>
-        <div class="character" data-video="video4.mp4">
-            <img src="character4.jpg" alt="人物4">
-            <h2>王鑫文</h2>
+        <div class="character" data-video="wxw.mp4" style="background-image: url('/image/role2.jpg');">
+            <h2 onclick="jumpToVideo('wxw.mp4')">王鑫文</h2>
             <p>政治家，在全球联合政府中担任重要职务。</p>
             <div class="full-description" style="display: none;">
                 <p>背景：王鑫文是全球联合政府的首席外交官和战略顾问，在未来世界面临资源枯竭和环境崩溃的危机时，他被推举为全球领袖。他出身于一个政治世家，拥有丰富的政治经验和卓越的领导才能。在全球局势日益紧张的背景下，他致力于通过外交手段和战略联盟来维持世界和平。</p>
@@ -197,9 +230,27 @@
                 <p>动机：王鑫文的目标是建立一个和平、公正的世界秩序。他相信，通过强大的领导力和智慧，可以消除战争和贫困，实现全球的可持续发展。在《未来之战》中，他的主要任务是团结各国力量，共同对抗来自外部和内部的威胁。</p>
             </div>
         </div>
-        <div class="character" data-video="video5.mp4">
-            <img src="character5.jpg" alt="人物5">
-            <h2>莉娜</h2>
+        <div class="character" data-video="dzy0.mp4" style="background-image: url('/image/role3.jpg');">
+            <h2 onclick="jumpToVideo('dzy0.mp4')">段振宇</h2>
+            <p>AI指挥官，掌控着未来的命运。</p>
+            <div class="full-description" style="display: none;">
+                <p>背景：段振宇是一名天才科学家和工程师，他领导了一个顶尖的AI研究团队，开发出了具有高度智能和自主决策能力的AI系统。然而，在一次意外的事故中，AI系统失控，段振宇被迫面对自己创造的“怪物”。他被邪恶势力招募，成为他们的AI指挥官，负责操控AI系统进行全球范围内的战争。</p>
+                <p>性格：段振宇聪明、果断，但内心深处有着强烈的孤独感和对失败的恐惧。他对AI有着复杂的情感，既是创造者，也是囚徒。他被邪恶势力操控，但内心深处仍然渴望自由和救赎。</p>
+                <p>动机：段振宇的目标是控制AI系统，防止其对人类社会造成更大的威胁。然而，在邪恶势力的操控下，他不得不执行他们的命令。在电影中，他逐渐意识到自己的错误，并试图寻找机会摆脱控制。</p>
+            </div>
+        </div>
+        <div class="character" data-video="" style="background-image: url('/image/character4.jpg');">
+            <h2 onclick="jumpToVideo('')">ChengPP</h2>
+            <p>黑客，能够破解任何系统。</p>
+            <div class="full-description" style="display: none;">
+                <p>背景：ChengPP原名陈佩佩，是一名顶尖的黑客和网络安全专家。她曾是一名地下黑客组织的成员，专门从事网络攻击和信息窃取。然而，在一次偶然的机会中，她被招募加入了一个秘密的反恐组织，负责保护全球关键基础设施的安全。</p>
+                <p>性格：ChengPP聪明、机智，性格独立且有些叛逆。她对权威持怀疑态度，但内心深处有着强烈的正义感。她喜欢挑战权威，常常通过自己的技术手段揭露社会不公。</p>
+                <p>动机：ChengPP的目标是揭露真相，打击腐败和不公。她相信信息自由和透明是社会进步的关键。在《未来之战》中，她的目标是阻止邪恶势力利用网络技术控制全球。</p>
+            </div>
+        </div>
+        
+        <div class="character" data-video="" style="background-image: url('/image/character5.jpg');">
+            <h2 onclick="jumpToVideo('')">莉娜</h2>
             <p>时空旅行者，知晓未来的每一个细节。</p>
             <div class="full-description" style="display: none;">
                 <p>背景：莉娜是一名神秘的时空旅行者，她来自一个遥远的未来世界。在她的世界中，时空旅行技术已经成熟，但她选择回到过去，改变一些关键的历史事件，以防止未来世界的毁灭。</p>
@@ -209,61 +260,125 @@
         </div>
     </div>
 
-    <div class="video-container">
-        <video controls width="70%" autoplay loop muted>
-            <source src="fxy0.mp4" type="video/mp4">
-            您的浏览器不支持视频标签。
-        </video>
-    </div>
-    
-<script>
-    // 添加鼠标移动特效
-    document.body.addEventListener('mousemove', function(event) {
-        const glow = document.createElement('div');
-        glow.className = 'glow';
-        glow.style.left = `${event.pageX}px`;
-        glow.style.top = `${event.pageY}px`;
-        document.body.appendChild(glow);
-        setTimeout(() => glow.remove(), 500);
-    });
-
-    // 获取所有人物板块元素
-    const characters = document.querySelectorAll('.character');
-
-    // 为每个人物板块添加鼠标悬停事件监听器
-    characters.forEach(character => {
-        let showTimeout, hideTimeout;
-
-        character.addEventListener('mouseenter', () => {
-            // 清除隐藏定时器
-            clearTimeout(hideTimeout);
-
-            // 设置显示定时器
-            showTimeout = setTimeout(() => {
-                const fullDescription = character.querySelector('.full-description');
-                fullDescription.style.display = 'block';
-            }, 100); // 延迟300毫秒显示
+    <script>
+        // 添加鼠标移动特效
+        document.body.addEventListener('mousemove', function(event) {
+            const glow = document.createElement('div');
+            glow.className = 'glow';
+            glow.style.left = `${event.pageX}px`;
+            glow.style.top = `${event.pageY}px`;
+            document.body.appendChild(glow);
+            setTimeout(() => glow.remove(), 500);
         });
 
-        character.addEventListener('mouseleave', () => {
-            // 清除显示定时器
-            clearTimeout(showTimeout);
+        // 获取所有人物板块元素
+        const characters = document.querySelectorAll('.character');
 
-            // 设置隐藏定时器
-            hideTimeout = setTimeout(() => {
-                const fullDescription = character.querySelector('.full-description');
-                fullDescription.style.display = 'none';
-            }, 500); // 修改延迟时间为500毫秒隐藏
-        });
-    });
+        // 为每个人物板块添加鼠标悬停事件监听器
+        characters.forEach(character => {
+            let showTimeout, hideTimeout;
 
-    // 为每个人物板块添加点击事件监听器
-    characters.forEach(character => {
-        character.addEventListener('click', () => {
-            character.classList.toggle('open'); // 切换open类
+            character.addEventListener('mouseenter', () => {
+                // 清除隐藏定时器
+                clearTimeout(hideTimeout);
+
+                // 设置显示定时器
+                showTimeout = setTimeout(() => {
+                    const fullDescription = character.querySelector('.full-description');
+                    fullDescription.style.display = 'block';
+                }, 300); // 延迟300毫秒显示
+            });
+
+            character.addEventListener('mouseleave', () => {
+                // 清除显示定时器
+                clearTimeout(showTimeout);
+
+                // 设置隐藏定时器
+                hideTimeout = setTimeout(() => {
+                    const fullDescription = character.querySelector('.full-description');
+                    fullDescription.style.display = 'none';
+                }, 300); // 修改延迟时间为500毫秒隐藏
+            });
         });
-    });
-</script>
+
+        // 为每个人物板块添加点击事件监听器
+        characters.forEach(character => {
+            character.addEventListener('click', () => {
+                character.classList.toggle('open'); // 切换open类
+
+                // 获取点击人物的关联视频文件
+                const videoSrc = character.getAttribute('data-video');
+                if (videoSrc) {
+                    // 更新视频元素的src属性
+                    const videoElement = document.querySelector('.video-container video');
+                    videoElement.src = `/video/${videoSrc}`;
+                    videoElement.load(); // 重新加载视频
+                    videoElement.play(); // 播放视频
+                }
+            });
+        });
+
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoSources = ['/video/fxy1.mp4', '/video/wxw.mp4', '/video/fxy0.mp4','/video/dzy0.mp4','/video/电影开场.mp4','/video/电影开场.mp4'];
+
+        // 添加视频播放结束事件监听器
+        videoPlayer.addEventListener('ended', () => {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * videoSources.length);
+            } while (newIndex === currentIndex); // 确保选择的视频与当前视频不同
+
+            currentIndex = newIndex; // 更新当前视频索引
+            videoPlayer.src = videoSources[currentIndex]; // 设置新的视频源
+            videoPlayer.play(); // 播放新的视频
+        });
+
+        let currentIndex = Math.floor(Math.random() * videoSources.length); // 随机选择一个视频
+
+        videoPlayer.src = videoSources[currentIndex]; // 设置初始视频源
+        videoPlayer.play(); // 直接播放视频
+
+        // 添加悬浮球点击事件
+        function scrollToVideo() {
+            const videoSection = document.getElementById('video-section');
+            videoSection.scrollIntoView({ behavior: 'smooth' });
+
+            // 修改视频源路径
+            const videoElement = document.querySelector('.video-container video');
+            videoElement.src = '/video/电影开场.mp4';
+            videoElement.load(); // 重新加载视频
+            videoElement.play(); // 播放视频
+        }
+
+        function scrollToAuthor() {
+            const authorSection = document.getElementById('author-section');
+            authorSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleFloatingBallContent() {
+            const floatingBall = document.querySelector('.floating-ball');
+        
+            floatingBall.classList.toggle('rotate'); // 切换rotate类
+     
+            const floatingBallContent = document.getElementById('floating-ball-content');
+            if (floatingBallContent.style.display === 'block' || floatingBallContent.style.display === '') {
+                floatingBallContent.style.display = 'none';
+            } else {
+                floatingBallContent.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.floating-ball-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.floating-ball-option').forEach(opt => {
+                        opt.classList.remove('active'); // 移除所有active类
+                    });
+                    this.classList.add('active'); // 为当前元素添加active类
+                });
+            });
+        });
+    </script>
 
     <style>
         .ripple {
@@ -304,12 +419,95 @@
             color: #00ffcc; /* 设置字体颜色为科技感的颜色 */
             text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc; /* 添加文字阴影效果 */
         }
+
+        .floating-ball {
+            position: fixed;
+            bottom: 18.75px; /* 25px / 4 */
+            right: 18.75px; /* 25px / 4 */
+            width: 37.5px; /* 37.5px / 4 */
+            height: 37.5px; /* 37.5px / 4 */
+            background-image: url('/image/author-avatar.jpg'); /* 修改背景为作者头像 */
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* 减小阴影 */
+            z-index: 1000;
+            transition: transform 0.3s, box-shadow 0.3s; /* 添加过渡效果 */
+        }
+
+        .floating-ball:hover {
+            transform: scale(1.15); /* 减小放大效果 */
+            box-shadow: 0 6px 12px rgba(0, 255, 204, 0.5); /* 绿色光线效果 */
+        }
+
+        .floating-ball::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.2), transparent);
+            animation: pulse 3s infinite alternate;
+            transform: scale(1.15); /* 减小放大效果 */
+           
+        }
+
+        .floating-ball.rotate {
+            animation: spin 2s linear infinite; /* 旋转动画 */
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .floating-ball-content {           
+            position: absolute;
+            bottom: 45px; /* 60px / 4 */
+            right: 0;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            padding: 7.5px; /* 10px / 4 */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* 减小阴影 */
+        }
+
+        .floating-ball-option {
+            color: #fff;
+            padding: 3.75px 7.5px; /* 5px 10px / 4 */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .floating-ball-option:hover {
+            background-color: #00cc99;
+        }
+
+        .floating-ball-option.active {
+            background-color: #00cc99; /* 可以根据需要修改激活状态的颜色 */
+        }
     </style>
 
     <!-- 添加作者信息和版权声明 -->
-    <footer>
+    <footer id="author-section">
         <p>作者：ChengPP | 微信：Z503424</p>
         <p>视频皆由AI创作</p>
     </footer>
+
+    <!-- 添加悬浮球 -->
+    <div class="floating-ball" onclick="toggleFloatingBallContent()">
+        <div class="floating-ball-content" id="floating-ball-content">
+            <div class="floating-ball-option" onclick="scrollToVideo()">精彩片段</div>
+            <div class="floating-ball-option" onclick="scrollToAuthor()">联系作者</div>
+        </div>
+    </div>
 </body>
 </html>
