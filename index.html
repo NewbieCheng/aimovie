@@ -206,7 +206,7 @@
 
     <div class="video-container" id="video-section">
         <video id="videoPlayer" autoplay muted controls>
-            <source src="/video/fxy0.mp4" type="video/mp4">
+            <source src="fxy0.mp4" type="mp4">
             您的浏览器不支持HTML5视频标签。
         </video>
     </div>
@@ -311,7 +311,7 @@
                 if (videoSrc) {
                     // 更新视频元素的src属性
                     const videoElement = document.querySelector('.video-container video');
-                    videoElement.src = `/video/${videoSrc}`;
+                    videoElement.src = `${videoSrc}`;
                     videoElement.load(); // 重新加载视频
                     videoElement.play(); // 播放视频
                 }
@@ -319,7 +319,7 @@
         });
 
         const videoPlayer = document.getElementById('videoPlayer');
-        const videoSources = ['/video/fxy1.mp4', '/video/wxw.mp4', '/video/fxy0.mp4','/video/dzy0.mp4','/video/电影开场.mp4','/video/电影开场.mp4'];
+        const videoSources = ['fxy1.mp4', 'wxw.mp4', 'fxy0.mp4','dzy0.mp4','电影开场.mp4','电影开场.mp4'];
 
         // 添加视频播放结束事件监听器
         videoPlayer.addEventListener('ended', () => {
@@ -345,7 +345,7 @@
 
             // 修改视频源路径
             const videoElement = document.querySelector('.video-container video');
-            videoElement.src = '/video/电影开场.mp4';
+            videoElement.src = '电影开场.mp4';
             videoElement.load(); // 重新加载视频
             videoElement.play(); // 播放视频
         }
